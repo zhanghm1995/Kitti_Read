@@ -1,0 +1,4 @@
+#Add by Zhanghm in 2017-12-25
+build/
+cmake-build-debug/
+.idea/
