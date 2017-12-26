@@ -143,32 +143,46 @@ void showLaserImage(std::vector<RichPoint>& laserPt,cv::Mat& rawImg,cv::Mat& cal
     //遍历所有点云
     for(int ptNum = 0;ptNum<laserPt.size();++ptNum)
     {
-
-            camWorldPt.at<float>(0,0) =
-                    calibTr.at<float>(0,0)*laserPt[ptNum].x()+
-                    calibTr.at<float>(0,1)*laserPt[ptNum].y()+
-                    calibTr.at<float>(0,2)*laserPt[ptNum].z()+
-                    calibTr.at<float>(0,3)*1;
-            camWorldPt.at<float>(1,0) =
-                    calibTr.at<float>(1,0)*laserPt[ptNum].x()+
-                    calibTr.at<float>(1,1)*laserPt[ptNum].y()+
-                    calibTr.at<float>(1,2)*laserPt[ptNum].z()+
-                    calibTr.at<float>(1,3)*1;
-            camWorldPt.at<float>(2,0) =
-                    calibTr.at<float>(2,0)*laserPt[ptNum].x()+
-                    calibTr.at<float>(2,1)*laserPt[ptNum].y()+
-                    calibTr.at<float>(2,2)*laserPt[ptNum].z()+
-                    calibTr.at<float>(2,3)*1;
+        camWorldPt.at<float>(0,0) =
+                calibTr.at<float>(0,0)*laserPt[ptNum].x()+
+                calibTr.at<float>(0,1)*laserPt[ptNum].y()+
+                calibTr.at<float>(0,2)*laserPt[ptNum].z()+
+                calibTr.at<float>(0,3)*1;
+        camWorldPt.at<float>(1,0) =
+                calibTr.at<float>(1,0)*laserPt[ptNum].x()+
+                calibTr.at<float>(1,1)*laserPt[ptNum].y()+
+                calibTr.at<float>(1,2)*laserPt[ptNum].z()+
+                calibTr.at<float>(1,3)*1;
+        camWorldPt.at<float>(2,0) =
+                calibTr.at<float>(2,0)*laserPt[ptNum].x()+
+                calibTr.at<float>(2,1)*laserPt[ptNum].y()+
+                calibTr.at<float>(2,2)*laserPt[ptNum].z()+
+                calibTr.at<float>(2,3)*1;
         if(camWorldPt.at<float>(2,0)<=2)
             continue;
+
+        //compute the point distance
+        float rr = laserPt[ptNum].x()*laserPt[ptNum].x()+
+                laserPt[ptNum].y()*laserPt[ptNum].y()+
+                laserPt[ptNum].z()*laserPt[ptNum].z();
+        double dist = sqrt(rr);
 
         cv::Mat transformMat = calibP0*camWorldPt;
         ptL1 = transformMat.at<float>(0,0)/transformMat.at<float>(2,0);
         ptL2 = transformMat.at<float>(1,0)/transformMat.at<float>(2,0);
+
         if(ptL1>0&&ptL2>0&&ptL1<rawImg.cols&&ptL2<rawImg.rows)
         {
+            int R_component = 0;
+
+            if(dist>60.0)
+                R_component = 255;
+            else
+                R_component = dist*4;
+
+//            cout<<R_component<<endl;
 //            fprintf(savePt,"%.4f %.4f\n",ptL1,ptL2);
-            cv::circle(rawImg,cv::Point(ptL1,ptL2),1,cv::Scalar(255,0,0));
+            cv::circle(rawImg,cv::Point(ptL1,ptL2),1,cv::Scalar(0,0,R_component));
 
         }
 
@@ -178,7 +192,7 @@ void showLaserImage(std::vector<RichPoint>& laserPt,cv::Mat& rawImg,cv::Mat& cal
 }
 
 
-int main() {
+int main(){
     //根目录所在路径
     string seqDirPath = "/home/zhanghm/Datasets/KITTI_Dataset/odometry/01/";
     string calibFilePath = seqDirPath+calibFileName;
