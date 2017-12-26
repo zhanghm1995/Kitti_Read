@@ -9,5 +9,5 @@ find_package(PCL 1.7 REQUIRED)
 include_directories(${OpenCV_INCLUDE_DIRS} ${PCL_INCLUDE_DIRS})
 
 
-add_executable(Kitti_Read main.cpp rich_point.cpp)
-target_link_libraries(Kitti_Read ${OpenCV_LIBS})
+add_executable(Kitti_Read main.cpp rich_point.cpp kitti_read_utils.h kitti_read_utils.cpp)
+target_link_libraries(Kitti_Read ${OpenCV_LIBS} ${PCL_LIBRARIES})
