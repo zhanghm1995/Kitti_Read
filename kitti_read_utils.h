@@ -18,7 +18,13 @@
 #include <Eigen/Dense>
 
 namespace kitti_read{
-    bool readOdometryCalib(const std::string& calibFile,cv::Mat& projectionMatrix,cv::Mat& cameraMatrix2,cv::Mat& velo2camera);
+    //! \brief read the calib.txt file in odometry dataset
+    //! \param calibFile
+    //! \param projectionMatrix size 3X4, project 3D point in lidar to camera image coordinate
+    //! \param cameraMatrix  size 3X4,project 3D point under camera0 coordinate to other camera image,to image of camera2 by default
+    //! \param velo2camera size 4X4,Tr,velodyne lidar point cloud to camera0 world coordinate
+    //! \return
+    bool readOdometryCalib(const std::string& calibFile,cv::Mat& projectionMatrix,cv::Mat& cameraMatrix,cv::Mat& velo2camera);
 
     //! \brief read image sequence
     //! \param imagePath image parent diretory name, include '/'

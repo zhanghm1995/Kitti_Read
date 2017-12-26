@@ -119,7 +119,7 @@ namespace kitti_read{
 
     bool project2Image(cv::Mat& rgbImg,pcl::PointCloud<pcl::PointXYZ>::Ptr veloCloudPtr,cv::Mat& projectionMatrix)
     {
-        if(!rgbImg.data||veloCloudPtr)
+        if(!rgbImg.data||!veloCloudPtr)
         {
             printf("No valid rgbImage or valid point cloud data!");
             return false;
@@ -134,7 +134,8 @@ namespace kitti_read{
             veloPoint3D.at<float>(1,0) = veloCloudPtr->points[i].y;
             veloPoint3D.at<float>(2,0) = veloCloudPtr->points[i].z;
 
-            //eliminate the point behind camera
+            //Important!! eliminate the point behind camera
+            //otherwise, it would project redundant points
             if(veloCloudPtr->points[i].x < 0)
                 continue;
 
