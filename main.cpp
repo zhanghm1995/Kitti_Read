@@ -19,7 +19,7 @@ string imgPatt = "%06d.png";
 string laserPatt = "%06d.bin";
 int main(){
     //根目录所在路径
-    string seqDirPath = "/home/zhanghm/Datasets/KITTI_Dataset/odometry/01/";
+    string seqDirPath = "/home/zhanghm/Datasets/KITTI/odometry/01/";
     string calibFilePath = seqDirPath+calibFileName;
 
     Mat projectionMatrix,cameraMatrix,velo2camera;
